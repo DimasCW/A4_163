@@ -23,7 +23,7 @@ interface PemilikService {
 
     //@GET("baca1pemilik.php")
     @GET("{id_pemilik}")
-    suspend fun getPemilikbyNim(@Path("id_pemilik")id_pemilik: String): PemilikDetailResponse
+    suspend fun getPemilikbyid(@Path("id_pemilik")id_pemilik: String): PemilikDetailResponse
 
     //@POST("insertpemilik.php")
     @POST("pemilik")
