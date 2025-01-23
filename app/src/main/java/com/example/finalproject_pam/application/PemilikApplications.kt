@@ -1,8 +1,8 @@
 package com.example.finalproject_pam.application
 
 import android.app.Application
-import com.example.finalproject_pam.dependenciesinjection.AppContainer
-import com.example.finalproject_pam.dependenciesinjection.PemilikContainer
+import com.example.session12.dependenciesinjection.AppContainer
+import com.example.session12.dependenciesinjection.PemilikContainer
 
 class PemilikApplications: Application(){
     lateinit var container: AppContainer

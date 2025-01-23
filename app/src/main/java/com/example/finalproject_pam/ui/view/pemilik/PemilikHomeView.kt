@@ -3,34 +3,14 @@ package com.example.finalproject_pam.ui.view.pemilik
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,13 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject_pam.R
-import com.example.finalproject_pam.model.Pemilik
 import com.example.finalproject_pam.ui.PenyediaViewModel
 import com.example.finalproject_pam.ui.costumwidget.CostumeTopAppBar
 import com.example.finalproject_pam.ui.navigation.DestinasiNavigasi
+import com.example.finalproject_pam.model.Pemilik
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeUiState
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeVM
-
 
 object DestinasiHome : DestinasiNavigasi {
     override val route = "home"
@@ -59,13 +38,13 @@ object DestinasiHome : DestinasiNavigasi {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PemilikHomeView(
-    navigateToItemEntry: ()-> Unit,
+    navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
-    onDetailClick: (String) -> Unit={},
+    onDetailClick: (String) -> Unit = {},
     viewModel: PemilikHomeVM = viewModel(factory = PenyediaViewModel.Factory)
-){
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold (
+    Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
@@ -86,13 +65,14 @@ fun PemilikHomeView(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pemilik")
             }
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
         PemilikHomeStatus(
             pemilikhomeUiState = viewModel.pmlkUIState,
-            retryAction = { viewModel.getPmlk() }, modifier = Modifier.padding(innerPadding),
+            retryAction = { viewModel.getPmlk() },
+            modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick,
-            onDeleteClick = {
-                viewModel.deletePemilik(it.id_pemilik)
+            onDeleteClick = { pemilik ->
+                viewModel.deletePemilik(pemilik.id_pemilik)
                 viewModel.getPmlk()
             }
         )
@@ -104,35 +84,31 @@ fun PemilikHomeStatus(
     pemilikhomeUiState: PemilikHomeUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Pemilik) -> Unit={},
+    onDeleteClick: (Pemilik) -> Unit = {},
     onDetailClick: (String) -> Unit
-){
-    when(pemilikhomeUiState) {
+) {
+    when (pemilikhomeUiState) {
         is PemilikHomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
-
-        is PemilikHomeUiState.Success ->
+        is PemilikHomeUiState.Success -> {
             if (pemilikhomeUiState.pemilik.isEmpty()) {
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Tidak ada data pemilik")
                 }
             } else {
                 PmlkLayout(
-                    pemilik = pemilikhomeUiState.pemilik, modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it.id_pemilik)
-                    },
-                    onDeleteClick = {
-                        onDeleteClick(it)
-                    }
+                    pemilik = pemilikhomeUiState.pemilik,
+                    modifier = modifier.fillMaxWidth(),
+                    onDetailClick = { onDetailClick(it.id_pemilik) },
+                    onDeleteClick = { onDeleteClick(it) }
                 )
             }
+        }
         is PemilikHomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
 
-//Homescreen menampilkan loading message
 @Composable
-fun OnLoading(modifier: Modifier = Modifier){
+fun OnLoading(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
         painter = painterResource(R.drawable.img),
@@ -140,18 +116,17 @@ fun OnLoading(modifier: Modifier = Modifier){
     )
 }
 
-//Homescreen menampilkan error message
 @Composable
-fun OnError(retryAction: ()->Unit, modifier: Modifier = Modifier){
-    Column (
+fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
             painter = painterResource(id = R.drawable.img), contentDescription = ""
         )
-        Text(text = stringResource(R.string.loading_failed),modifier = Modifier.padding(16.dp))
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
         Button(onClick = retryAction) {
             Text(stringResource(R.string.retry))
         }
@@ -164,21 +139,19 @@ fun PmlkLayout(
     modifier: Modifier = Modifier,
     onDetailClick: (Pemilik) -> Unit,
     onDeleteClick: (Pemilik) -> Unit = {}
-){
-    LazyColumn (
+) {
+    LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
-    ){
-        items(pemilik){pemilik ->
+    ) {
+        items(pemilik) { pemilik ->
             PmlkCard(
                 pemilik = pemilik,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onDetailClick(pemilik) },
-                onDeleteClick = {
-                    onDeleteClick(pemilik)
-                }
+                onDeleteClick = { onDeleteClick(pemilik) }
             )
         }
     }
@@ -223,7 +196,7 @@ fun PmlkCard(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Bagian kanan: Informasi mahasiswa
+            // Bagian kanan: Informasi pemilik
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -236,7 +209,7 @@ fun PmlkCard(
                     color = Color(0xFF00796B) // Warna teks hijau tua
                 )
                 Text(
-                    text = "ID_PEMILIK: ${pemilik.kontak_pemilik}",
+                    text = "Kontak: ${pemilik.kontak_pemilik}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF004D40)
                 )
@@ -253,7 +226,3 @@ fun PmlkCard(
         }
     }
 }
-
-
-
-

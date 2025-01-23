@@ -1,9 +1,10 @@
-package com.example.finalproject_pam.repository
+package com.example.session12.repository
 
 import com.example.finalproject_pam.model.AllPemilikResponse
 import com.example.finalproject_pam.model.Pemilik
 import com.example.finalproject_pam.service.PemilikService
-import java.io.IOException
+import okio.IOException
+
 
 interface PemilikRepository {
     suspend fun getPemilik(): AllPemilikResponse
@@ -15,7 +16,7 @@ interface PemilikRepository {
 
 class NetworkPemilikRepository(
     private val pemilikApiService: PemilikService
-) : PemilikRepository {
+) :PemilikRepository {
 
 
     override suspend fun insertPemilik(pemilik: Pemilik) {
@@ -30,7 +31,7 @@ class NetworkPemilikRepository(
         try {
             val response = pemilikApiService.deletePemilik(id_pemilik)
             if (!response.isSuccessful) {
-                throw IOException("Failed to delete Mahasiswa. HTTP Status code: " +
+                throw IOException("Failed to delete pemilik. HTTP Status code: " +
                         "${response.code()}")
             } else {
                 response.message()
@@ -45,7 +46,7 @@ class NetworkPemilikRepository(
         pemilikApiService.getAllPemilik()
 
     override suspend fun getPemilikById(id_pemilik: String): Pemilik {
-        return pemilikApiService.getPemilikbyid(id_pemilik).data
+        return pemilikApiService.getPemilikById(id_pemilik).data
     }
 
 }

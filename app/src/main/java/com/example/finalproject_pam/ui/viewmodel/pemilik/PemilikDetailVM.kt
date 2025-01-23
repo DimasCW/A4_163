@@ -7,8 +7,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalproject_pam.model.Pemilik
-import com.example.finalproject_pam.repository.PemilikRepository
 import com.example.finalproject_pam.ui.view.pemilik.DestinasiDetail
+import com.example.session12.repository.PemilikRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException

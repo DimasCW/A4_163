@@ -10,7 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.finalproject_pam.ui.view.pemilik.DestinasiDetail
 import com.example.finalproject_pam.ui.view.pemilik.DestinasiEntry
+import com.example.finalproject_pam.ui.view.pemilik.DestinasiUpdate
+import com.example.finalproject_pam.ui.view.pemilik.EntryPmlkScreen
+import com.example.finalproject_pam.ui.view.pemilik.PemilikDetailView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikHomeView
+import com.example.finalproject_pam.ui.view.pemilik.PemilikUpdateView
 
 object DestinasiHomePemilik : DestinasiNavigasi{
     override val route = "home"
@@ -32,39 +36,39 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 }
             )
         }
-//        composable(DestinasiEntry.route){
-//            EntryMhsScreen(navigateBack = {
-//                navController.navigate(DestinasiHomePemilik.route){
-//                    popUpTo(DestinasiHomePemilik.route){
-//                        inclusive = true
-//                    }
-//                }
-//            })
-//        }
-//        composable(DestinasiDetail.routesWithArg, arguments = listOf(navArgument(DestinasiDetail.NIM) {
-//            type = NavType.StringType })
-//        ){
-//            val nim = it.arguments?.getString(DestinasiDetail.NIM)
-//            nim?.let { nim ->
-//                DetailView(
-//                    navigateToItemUpdate = { navController.navigate("${DestinasiUpdate.route}/$nim") },
-//                    navigateBack = { navController.navigate(DestinasiHomePemilik.route) {
-//                        popUpTo(DestinasiHomePemilik.route) { inclusive = true }
-//                    }
-//                    }
-//                )
-//            }
-//        }
-//        composable(DestinasiUpdate.routesWithArg, arguments = listOf(navArgument(DestinasiDetail.NIM){
-//            type = NavType.StringType })
-//        ){
-//            val nim = it.arguments?.getString(DestinasiUpdate.NIM)
-//            nim?.let { nim ->
-//                UpdateView(
-//                    onBack = { navController.popBackStack() },
-//                    onNavigate = { navController.popBackStack() }
-//                )
-//            }
-//        }
+        composable(DestinasiEntry.route){
+            EntryPmlkScreen(navigateBack = {
+                navController.navigate(DestinasiHomePemilik.route){
+                    popUpTo(DestinasiHomePemilik.route){
+                        inclusive = true
+                    }
+                }
+            })
+        }
+        composable(DestinasiDetail.routesWithArg, arguments = listOf(navArgument(DestinasiDetail.ID_PEMILIK) {
+            type = NavType.StringType })
+        ){
+            val id_pemilik = it.arguments?.getString(DestinasiDetail.ID_PEMILIK)
+            id_pemilik?.let { id_pemilik ->
+                PemilikDetailView(
+                    navigateToItemUpdate = { navController.navigate("${DestinasiUpdate.route}/$id_pemilik") },
+                    navigateBack = { navController.navigate(DestinasiHomePemilik.route) {
+                        popUpTo(DestinasiHomePemilik.route) { inclusive = true }
+                    }
+                    }
+                )
+            }
+        }
+        composable(DestinasiUpdate.routesWithArg, arguments = listOf(navArgument(DestinasiDetail.ID_PEMILIK){
+            type = NavType.StringType })
+        ){
+            val id_pemilik = it.arguments?.getString(DestinasiUpdate.ID_PEMILIK)
+            id_pemilik?.let { id_pemilik ->
+                PemilikUpdateView(
+                    onBack = { navController.popBackStack() },
+                    onNavigate = { navController.popBackStack() }
+                )
+            }
+        }
     }
 }
