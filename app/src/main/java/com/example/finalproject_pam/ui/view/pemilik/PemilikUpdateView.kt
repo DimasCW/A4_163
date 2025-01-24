@@ -50,7 +50,7 @@ fun PemilikUpdateView(
         EntryBody(
             modifier = Modifier.padding(padding),
             pemilikinsertUiState = viewModel.UpdateUiState,
-            onSiswaValueChange = viewModel::updateInsertPmlkState,
+            onPemilikValueChange = viewModel::updateInsertPmlkState,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.updatePmlk()

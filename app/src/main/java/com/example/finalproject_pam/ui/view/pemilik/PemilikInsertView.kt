@@ -56,10 +56,10 @@ fun EntryPmlkScreen(
     ){ innerPadding ->
         EntryBody(
             pemilikinsertUiState = viewModel.uiState,
-            onSiswaValueChange = viewModel::updateInsertPmlkState,
+            onPemilikValueChange = viewModel::updateInsertPmlkState,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.insertPemilik()
+                    viewModel.insertPmlk()
                     navigateBack()
                 }
             },
@@ -74,7 +74,7 @@ fun EntryPmlkScreen(
 @Composable
 fun EntryBody(
     pemilikinsertUiState: PemilikInsertUiState,
-    onSiswaValueChange: (PemilikInsertUiEvent)->Unit,
+    onPemilikValueChange: (PemilikInsertUiEvent)->Unit,
     onSaveClick: ()->Unit,
     modifier: Modifier = Modifier
 ){
@@ -84,7 +84,7 @@ fun EntryBody(
     ){
         FormInput(
             pemilikinsertUiEvent = pemilikinsertUiState.pemilikinsertUiEvent,
-            onValueChange = onSiswaValueChange,
+            onValueChange = onPemilikValueChange,
             modifier = Modifier.fillMaxWidth()
         )
         Button(
@@ -110,6 +110,14 @@ fun FormInput(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ){
         OutlinedTextField(
+            value = pemilikinsertUiEvent.id_pemilik,
+            onValueChange = {onValueChange(pemilikinsertUiEvent.copy(id_pemilik = it))},
+            label = { Text("Id Pemilik") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+        OutlinedTextField(
             value = pemilikinsertUiEvent.nama_pemilik,
             onValueChange = {onValueChange(pemilikinsertUiEvent.copy(nama_pemilik = it))},
             label = { Text("Nama") },
@@ -120,7 +128,7 @@ fun FormInput(
         OutlinedTextField(
             value = pemilikinsertUiEvent.kontak_pemilik,
             onValueChange = {onValueChange(pemilikinsertUiEvent.copy(kontak_pemilik = it))},
-            label = { Text("NIM") },
+            label = { Text("Kontak ") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true

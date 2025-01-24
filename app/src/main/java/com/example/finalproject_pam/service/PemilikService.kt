@@ -26,7 +26,7 @@ interface PemilikService {
     suspend fun getPemilikById(@Path("id_pemilik")id_pemilik: String): PemilikDetailResponse
 
     //@POST
-    @POST("pemilik")
+    @POST("store")
     suspend fun insertPemilik(@Body pemilik: Pemilik)
 
 

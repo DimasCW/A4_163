@@ -17,7 +17,7 @@ class PemilikInsertVM (private val pmlk: PemilikRepository): ViewModel() {
         uiState = PemilikInsertUiState(pemilikinsertUiEvent = pemilikinsertUiEvent)
     }
 
-    suspend fun insertPemilik() {
+    suspend fun insertPmlk() {
         viewModelScope.launch{
             try {
                 pmlk.insertPemilik(uiState.pemilikinsertUiEvent.toPmlk())
