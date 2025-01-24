@@ -1,4 +1,4 @@
-package com.example.session12.repository
+package com.example.finalproject_pam.repository
 
 import com.example.finalproject_pam.model.AllPemilikResponse
 import com.example.finalproject_pam.model.Pemilik

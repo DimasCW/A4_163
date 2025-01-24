@@ -30,14 +30,15 @@ import com.example.finalproject_pam.model.Pemilik
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeUiState
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeVM
 
-object DestinasiHome : DestinasiNavigasi {
-    override val route = "home"
+object DestinasiHomePemilik : DestinasiNavigasi {
+    override val route = "home_pemilik"
     override val titleRes = "Pemilik"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PemilikHomeView(
+    navigateBack: () -> Unit,
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
@@ -48,14 +49,16 @@ fun PemilikHomeView(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiHome.titleRes,
-                canNavigateBack = false,
+                title = DestinasiHomePemilik.titleRes,
+                canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
                     viewModel.getPmlk()
-                }
+                },
+                navigateUp = navigateBack
             )
         },
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,

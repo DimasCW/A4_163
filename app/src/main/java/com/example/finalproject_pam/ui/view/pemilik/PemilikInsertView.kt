@@ -29,8 +29,8 @@ import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikInsertVM
 import kotlinx.coroutines.launch
 
 
-object DestinasiEntry: DestinasiNavigasi {
-    override val route ="item_entry"
+object DestinasiEntryPemilik: DestinasiNavigasi {
+    override val route ="entry_pemilik"
     override val titleRes = "Insert Pemilik"
 }
 
@@ -47,7 +47,7 @@ fun EntryPmlkScreen(
         modifier=modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiEntry.titleRes,
+                title = DestinasiEntryPemilik.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack

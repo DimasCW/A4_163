@@ -18,8 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-object DestinasiUpdate: DestinasiNavigasi {
-    override val route = "update"
+object DestinasiUpdatePemilik: DestinasiNavigasi {
+    override val route = "update_pemilik"
     override val titleRes = "Edit Pemilik"
     const val ID_PEMILIK = "id_pemilik"
     val routesWithArg = "$route/{$ID_PEMILIK}"
@@ -40,7 +40,7 @@ fun PemilikUpdateView(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiUpdate.titleRes,
+                title = DestinasiUpdatePemilik.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = onBack,

@@ -40,8 +40,8 @@ import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikDetailUiState
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikDetailVM
 
 
-object DestinasiDetail: DestinasiNavigasi {
-    override val route = "detail"
+object DestinasiDetailPemilik: DestinasiNavigasi {
+    override val route = "detail_pemilik"
     override val titleRes = "Detail Pemilik"
     const val ID_PEMILIK = "id_pemilik"
     val routesWithArg = "$route/{$ID_PEMILIK}"
@@ -58,7 +58,7 @@ fun PemilikDetailView(
     Scaffold(
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiDetail.titleRes,
+                title = DestinasiDetailPemilik.titleRes,
                 canNavigateBack = true,
                 navigateUp = navigateBack,
                 onRefresh = {

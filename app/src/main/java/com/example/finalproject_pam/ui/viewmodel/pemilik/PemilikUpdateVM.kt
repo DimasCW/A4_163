@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finalproject_pam.ui.view.pemilik.DestinasiUpdate
-import com.example.session12.repository.PemilikRepository
+import com.example.finalproject_pam.ui.view.pemilik.DestinasiUpdatePemilik
+import com.example.finalproject_pam.repository.PemilikRepository
 import kotlinx.coroutines.launch
 
 class PemilikUpdateVM (
@@ -17,7 +17,7 @@ class PemilikUpdateVM (
     var UpdateUiState by  mutableStateOf(PemilikInsertUiState())
         private set
 
-    private val _id_pemilik: String = checkNotNull(savedStateHandle[DestinasiUpdate.ID_PEMILIK])
+    private val _id_pemilik: String = checkNotNull(savedStateHandle[DestinasiUpdatePemilik.ID_PEMILIK])
 
     init {
         viewModelScope.launch {

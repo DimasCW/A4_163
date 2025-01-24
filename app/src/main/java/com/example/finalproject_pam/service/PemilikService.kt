@@ -18,21 +18,21 @@ interface PemilikService {
     )
 
     //@GET
-    @GET(".")
+    @GET("pemilik")
     suspend fun getAllPemilik(): AllPemilikResponse
 
     //@GET
-    @GET("{id_pemilik}")
+    @GET("pemilik/{id_pemilik}")
     suspend fun getPemilikById(@Path("id_pemilik")id_pemilik: String): PemilikDetailResponse
 
     //@POST
-    @POST("store")
+    @POST("pemilik/pemilik")
     suspend fun insertPemilik(@Body pemilik: Pemilik)
 
 
-    @PUT("{id_pemilik}")
+    @PUT("pemilik/{id_pemilik}")
     suspend fun updatePemilik(@Path("id_pemilik")id_pemilik: String, @Body pemilik: Pemilik)
 
-    @DELETE("{id_pemilik}")
+    @DELETE("pemilik/{id_pemilik}")
     suspend fun deletePemilik(@Path("id_pemilik")id_pemilik: String):retrofit2.Response<Void>
 }

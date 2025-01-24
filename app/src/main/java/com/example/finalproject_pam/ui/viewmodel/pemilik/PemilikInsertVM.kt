@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalproject_pam.model.Pemilik
-import com.example.session12.repository.PemilikRepository
+import com.example.finalproject_pam.repository.PemilikRepository
 import kotlinx.coroutines.launch
 
 class PemilikInsertVM (private val pmlk: PemilikRepository): ViewModel() {
