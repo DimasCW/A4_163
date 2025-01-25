@@ -18,5 +18,5 @@ data class AllManajerResponse(
 data class ManajerDetailResponse(
     val status: Boolean,
     val message: String,
-    val data: Pemilik
+    val data: Manajer
 )
