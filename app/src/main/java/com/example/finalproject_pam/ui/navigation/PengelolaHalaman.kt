@@ -19,6 +19,13 @@ import com.example.finalproject_pam.ui.view.jenis.DestinasiUpdateJenis
 import com.example.finalproject_pam.ui.view.pemilik.DestinasiUpdatePemilik
 import com.example.finalproject_pam.ui.view.pemilik.EntryPmlkScreen
 import com.example.finalproject_pam.ui.view.jenis.JenisUpdateView
+import com.example.finalproject_pam.ui.view.manajer.DestinasiDetailManajer
+import com.example.finalproject_pam.ui.view.manajer.DestinasiEntryManajer
+import com.example.finalproject_pam.ui.view.manajer.DestinasiUpdateManajer
+import com.example.finalproject_pam.ui.view.manajer.EntryMnjrScreen
+import com.example.finalproject_pam.ui.view.manajer.ManajerDetailView
+import com.example.finalproject_pam.ui.view.manajer.ManajerHomeView
+import com.example.finalproject_pam.ui.view.manajer.ManajerUpdateView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikDetailView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikHomeView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikUpdateView
@@ -32,6 +39,12 @@ object DestinasiHomeJenis : DestinasiNavigasi{
     override val route = "home_jenis"
     override val titleRes = "Jenis"
 }
+
+object DestinasiHomeManajer : DestinasiNavigasi{
+    override val route = "home_manajer"
+    override val titleRes = "Manajer"
+}
+
 
 @Composable
 fun PengelolaHalaman(navController: NavHostController = rememberNavController()){
@@ -47,9 +60,61 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                             },
                 onJenis = {
                     navController.navigate(DestinasiHomeJenis.route)
+                },
+                onManajer = {
+                    navController.navigate(DestinasiHomeManajer.route)
                 }
             )
         }
+
+        //        Manajer Navigasi
+//
+        composable(DestinasiHomeManajer.route){
+            ManajerHomeView(
+                navigateToItemEntry = {navController.navigate(DestinasiEntryManajer.route)},
+                onDetailClick = { id_manajer ->
+                    navController.navigate("${DestinasiDetailManajer.route}/$id_manajer")
+                },
+                navigateBack = { navController.popBackStack() },
+            )
+        }
+        composable(DestinasiEntryManajer.route){
+            EntryMnjrScreen(navigateBack = {
+                navController.navigate(DestinasiHomeManajer.route){
+                    popUpTo(DestinasiHomeManajer.route){
+                        inclusive = true
+                    }
+                }
+            })
+        }
+        composable(
+            DestinasiDetailManajer.routesWithArg, arguments = listOf(navArgument(DestinasiDetailManajer.ID_MANAJER) {
+            type = NavType.StringType })
+        ){
+            val id_manajer = it.arguments?.getString(DestinasiDetailManajer.ID_MANAJER)
+            id_manajer?.let { id_manajer ->
+                ManajerDetailView(
+                    navigateToItemUpdate = { navController.navigate("${DestinasiUpdateManajer.route}/$id_manajer") },
+                    navigateBack = { navController.navigate(DestinasiHomeManajer.route) {
+                        popUpTo(DestinasiHomeManajer.route) { inclusive = true }
+                    }
+                    }
+                )
+            }
+        }
+        composable(
+            DestinasiUpdateManajer.routesWithArg, arguments = listOf(navArgument(DestinasiDetailManajer.ID_MANAJER){
+                type = NavType.StringType })
+        ){
+            val id_manajer = it.arguments?.getString(DestinasiUpdateManajer.ID_MANAJER)
+            id_manajer?.let { id_manajer ->
+                ManajerUpdateView(
+                    onBack = { navController.popBackStack() },
+                    onNavigate = { navController.popBackStack() }
+                )
+            }
+        }
+
 
 //        Jenis Navigasi
 //
@@ -71,10 +136,10 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 }
             })
         }
-        composable(DestinasiDetailJenis.routesWithArg, arguments = listOf(navArgument(DestinasiDetailJenis.ID_Jenis) {
+        composable(DestinasiDetailJenis.routesWithArg, arguments = listOf(navArgument(DestinasiDetailJenis.ID_JENIS) {
             type = NavType.StringType })
         ){
-            val id_jenis = it.arguments?.getString(DestinasiDetailJenis.ID_Jenis)
+            val id_jenis = it.arguments?.getString(DestinasiDetailJenis.ID_JENIS)
             id_jenis?.let { id_jenis ->
                 JenisDetailView(
                     navigateToItemUpdate = { navController.navigate("${DestinasiUpdateJenis.route}/$id_jenis") },
@@ -86,7 +151,7 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             }
         }
         composable(
-            DestinasiUpdateJenis.routesWithArg, arguments = listOf(navArgument(DestinasiDetailJenis.ID_Jenis){
+            DestinasiUpdateJenis.routesWithArg, arguments = listOf(navArgument(DestinasiUpdateJenis.ID_Jenis){
             type = NavType.StringType })
         ){
             val id_jenis = it.arguments?.getString(DestinasiUpdateJenis.ID_Jenis)
