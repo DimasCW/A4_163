@@ -1,7 +1,9 @@
 package com.example.session12.dependenciesinjection
 
 import com.example.finalproject_pam.repository.JenisRepository
+import com.example.finalproject_pam.repository.ManajerRepository
 import com.example.finalproject_pam.repository.NetworkJenisRepository
+import com.example.finalproject_pam.repository.NetworkManajerRepository
 import com.example.finalproject_pam.repository.NetworkPemilikRepository
 import com.example.finalproject_pam.repository.PemilikRepository
 import com.example.finalproject_pam.service.JenisService
@@ -16,7 +18,7 @@ import retrofit2.Retrofit
 interface AppContainer{
     val pemilikRepository: PemilikRepository
     val jenisRepository: JenisRepository
-    val manajerRepository: JenisRepository
+    val manajerRepository: ManajerRepository
 }
 
 class Container : AppContainer{
@@ -39,10 +41,10 @@ class Container : AppContainer{
     override val jenisRepository: JenisRepository by lazy {
         NetworkJenisRepository(jenisService)
     }
-    private val manajerService: JenisService by lazy {
+    private val manajerService: ManajerService by lazy {
         retrofit.create(ManajerService::class.java)
     }
-    override val manajerRepository: JenisRepository by lazy {
-        NetworkJenisRepository(ManajerService)
+    override val manajerRepository: ManajerRepository by lazy {
+        NetworkManajerRepository(manajerService)
     }
 }

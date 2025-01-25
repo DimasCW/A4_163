@@ -27,7 +27,7 @@ class JenisDetailVM(
     var jenisDetailState: JenisDetailUiState by mutableStateOf(JenisDetailUiState.Loading)
         private set
 
-    private val _id_jenis: String = checkNotNull(savedStateHandle[DestinasiDetailJenis.ID_Jenis])
+    private val _id_jenis: String = checkNotNull(savedStateHandle[DestinasiDetailJenis.ID_JENIS])
 
     init {
         getJenisById()

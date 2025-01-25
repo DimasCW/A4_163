@@ -1,9 +1,6 @@
 package com.example.finalproject_pam.service
 
-import com.example.finalproject_pam.model.AllJenisResponse
 import com.example.finalproject_pam.model.AllManajerResponse
-import com.example.finalproject_pam.model.Jenis
-import com.example.finalproject_pam.model.JenisDetailResponse
 import com.example.finalproject_pam.model.Manajer
 import com.example.finalproject_pam.model.ManajerDetailResponse
 import retrofit2.http.Body

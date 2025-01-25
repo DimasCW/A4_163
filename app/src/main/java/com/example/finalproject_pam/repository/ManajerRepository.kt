@@ -1,18 +1,13 @@
 package com.example.finalproject_pam.repository
 
-
-import com.example.finalproject_pam.model.AllJenisResponse
 import com.example.finalproject_pam.model.AllManajerResponse
-import com.example.finalproject_pam.model.AllPemilikResponse
-import com.example.finalproject_pam.model.Jenis
 import com.example.finalproject_pam.model.Manajer
-import com.example.finalproject_pam.service.JenisService
 import com.example.finalproject_pam.service.ManajerService
 import okio.IOException
 
 
 interface ManajerRepository {
-    suspend fun getManajer(): AllJenisResponse
+    suspend fun getManajer(): AllManajerResponse
     suspend fun insertManajer(manajer: Manajer)
     suspend fun updateManajer(id_manajer: String, manajer: Manajer)
     suspend fun deleteManajer(id_manajer: String)

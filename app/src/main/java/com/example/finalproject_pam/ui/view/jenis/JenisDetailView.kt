@@ -41,8 +41,8 @@ import com.example.finalproject_pam.ui.viewmodel.jenis.JenisDetailVM
 object DestinasiDetailJenis: DestinasiNavigasi {
     override val route = "detail_jenis"
     override val titleRes = "Detail Jenis"
-    const val ID_Jenis = "id_Jenis"
-    val routesWithArg = "$route/{$ID_Jenis}"
+    const val ID_JENIS = "id_Jenis"
+    val routesWithArg = "$route/{$ID_JENIS}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

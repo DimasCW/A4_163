@@ -10,6 +10,10 @@ import com.example.finalproject_pam.ui.viewmodel.jenis.JenisDetailVM
 import com.example.finalproject_pam.ui.viewmodel.jenis.JenisHomeVM
 import com.example.finalproject_pam.ui.viewmodel.jenis.JenisInsertVM
 import com.example.finalproject_pam.ui.viewmodel.jenis.JenisUpdateVM
+import com.example.finalproject_pam.ui.viewmodel.manajer.ManajerDetailVM
+import com.example.finalproject_pam.ui.viewmodel.manajer.ManajerHomeVM
+import com.example.finalproject_pam.ui.viewmodel.manajer.ManajerInsertVM
+import com.example.finalproject_pam.ui.viewmodel.manajer.ManajerUpdateVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikDetailVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikInsertVM
