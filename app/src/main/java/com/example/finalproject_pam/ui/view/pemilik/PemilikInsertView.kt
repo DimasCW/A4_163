@@ -85,15 +85,10 @@ fun EntryBody(
         FormInput(
             pemilikinsertUiEvent = pemilikinsertUiState.pemilikinsertUiEvent,
             onValueChange = onPemilikValueChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onSave = onSaveClick
         )
-        Button(
-            onClick = onSaveClick,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Simpan")
-        }
+
     }
 }
 
@@ -103,15 +98,24 @@ fun FormInput(
     pemilikinsertUiEvent: PemilikInsertUiEvent,
     modifier: Modifier = Modifier,
     onValueChange: (PemilikInsertUiEvent)->Unit={},
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onSave: ()->Unit = {},
 ) {
+
+    val isFormValid = pemilikinsertUiEvent.id_pemilik.isNotBlank() &&
+            pemilikinsertUiEvent.nama_pemilik.isNotBlank() &&
+            pemilikinsertUiEvent.kontak_pemilik.isNotBlank()
     Column (
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ){
         OutlinedTextField(
             value = pemilikinsertUiEvent.id_pemilik,
-            onValueChange = {onValueChange(pemilikinsertUiEvent.copy(id_pemilik = it))},
+            onValueChange = {
+                if (it.length <= 15) {
+                    onValueChange(pemilikinsertUiEvent.copy(id_pemilik = it))
+                }
+            },
             label = { Text("Id Pemilik") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -119,7 +123,11 @@ fun FormInput(
         )
         OutlinedTextField(
             value = pemilikinsertUiEvent.nama_pemilik,
-            onValueChange = {onValueChange(pemilikinsertUiEvent.copy(nama_pemilik = it))},
+            onValueChange = {
+                if (it.length <= 30) {
+                    onValueChange(pemilikinsertUiEvent.copy(nama_pemilik = it))
+                }
+            },
             label = { Text("Nama") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -127,7 +135,11 @@ fun FormInput(
         )
         OutlinedTextField(
             value = pemilikinsertUiEvent.kontak_pemilik,
-            onValueChange = {onValueChange(pemilikinsertUiEvent.copy(kontak_pemilik = it))},
+            onValueChange = {
+                if (it.length <= 15) {
+                    onValueChange(pemilikinsertUiEvent.copy(kontak_pemilik = it))
+                }
+            },
             label = { Text("Kontak ") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -135,15 +147,17 @@ fun FormInput(
         )
 
 
-        if (enabled){
-            Text(
-                text = "Isi Semua Data",
-                modifier = Modifier.padding(12.dp)
-            )
-        }
         Divider(
             thickness = 8.dp,
             modifier = Modifier.padding(12.dp)
         )
+
+        Button(
+            onClick = { if (isFormValid) onSave() },
+            enabled = isFormValid,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Simpan")
+        }
     }
 }
