@@ -85,15 +85,10 @@ fun EntryBody(
         FormInput(
             manajerinsertUiEvent = manajerinsertUiState.manajerinsertUiEvent,
             onValueChange = onManajerValueChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onSave = onSaveClick
         )
-        Button(
-            onClick = onSaveClick,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Simpan")
-        }
+
     }
 }
 
@@ -103,15 +98,21 @@ fun FormInput(
     manajerinsertUiEvent: ManajerInsertUiEvent,
     modifier: Modifier = Modifier,
     onValueChange: (ManajerInsertUiEvent)->Unit={},
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onSave: ()->Unit = {}
 ) {
+    val isFormValid = manajerinsertUiEvent.id_manajer.isNotBlank() &&
+            manajerinsertUiEvent.nama_manajer.isNotBlank() &&
+            manajerinsertUiEvent.kontak_manajer.isNotBlank()
     Column (
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ){
         OutlinedTextField(
             value = manajerinsertUiEvent.id_manajer,
-            onValueChange = {onValueChange(manajerinsertUiEvent.copy(id_manajer = it))},
+            onValueChange = {
+                if (it.length <= 15){
+                onValueChange(manajerinsertUiEvent.copy(id_manajer = it))}},
             label = { Text("Id manajer") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -119,7 +120,9 @@ fun FormInput(
         )
         OutlinedTextField(
             value = manajerinsertUiEvent.nama_manajer,
-            onValueChange = {onValueChange(manajerinsertUiEvent.copy(nama_manajer = it))},
+            onValueChange = {
+                if (it.length <= 30){
+                onValueChange(manajerinsertUiEvent.copy(nama_manajer = it))}},
             label = { Text("Nama") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -127,23 +130,25 @@ fun FormInput(
         )
         OutlinedTextField(
             value = manajerinsertUiEvent.kontak_manajer,
-            onValueChange = {onValueChange(manajerinsertUiEvent.copy(kontak_manajer = it))},
+            onValueChange = {
+                if (it.length <= 15){
+                onValueChange(manajerinsertUiEvent.copy(kontak_manajer = it))}},
             label = { Text("Kontak ") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
-
-        if (enabled){
-            Text(
-                text = "Isi Semua Data",
-                modifier = Modifier.padding(12.dp)
-            )
-        }
         Divider(
             thickness = 8.dp,
             modifier = Modifier.padding(12.dp)
         )
+        Button(
+            onClick = { if (isFormValid) onSave() },
+            enabled = isFormValid,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Simpan")
+        }
     }
 }
