@@ -83,5 +83,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
 
+    implementation ("androidx.compose.material3:material3:1.0.0-alpha01")
     
 }
