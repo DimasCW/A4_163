@@ -18,6 +18,10 @@ import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikDetailVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikHomeVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikInsertVM
 import com.example.finalproject_pam.ui.viewmodel.pemilik.PemilikUpdateVM
+import com.example.finalproject_pam.ui.viewmodel.properti.PropertiDetailVM
+import com.example.finalproject_pam.ui.viewmodel.properti.PropertiHomeVM
+import com.example.finalproject_pam.ui.viewmodel.properti.PropertiInsertVM
+import com.example.finalproject_pam.ui.viewmodel.properti.PropertiUpdateVM
 
 object PenyediaViewModel{
     val Factory = viewModelFactory {
@@ -35,6 +39,11 @@ object PenyediaViewModel{
         initializer { ManajerInsertVM(aplikasi().container.manajerRepository) }
         initializer { ManajerDetailVM(createSavedStateHandle(),aplikasi().container.manajerRepository) }
         initializer { ManajerUpdateVM(createSavedStateHandle(),aplikasi().container.manajerRepository) }
+
+        initializer { PropertiHomeVM(aplikasi().container.propertiRepository) }
+        initializer { PropertiInsertVM(aplikasi().container.propertiRepository) }
+        initializer { PropertiDetailVM(createSavedStateHandle(),aplikasi().container.propertiRepository) }
+        initializer { PropertiUpdateVM(createSavedStateHandle(),aplikasi().container.propertiRepository) }
     }
     fun CreationExtras.aplikasi(): Applications =
         (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]as Applications)
