@@ -37,7 +37,8 @@ object DestinasiBeranda : DestinasiNavigasi {
 fun BerandaView(
     onPemilik: () -> Unit,
     onJenis: () -> Unit,
-    onManajer: () -> Unit
+    onManajer: () -> Unit,
+    onProperti: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(20.dp)
@@ -170,6 +171,51 @@ fun BerandaView(
             ) {
                 Button(
                     onClick = { onManajer() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFC441) // Mengganti warna button menjadi #ffc441
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    BasicText(
+                        text = "Cek Data",
+                        style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold)
+                    )
+                }
+            }
+        }
+
+        // Jarak antara box pertama dan kedua
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Box kedua dengan background foto, border radius, dan shadow
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable {
+                    // Tindakan untuk box kedua
+                }
+                .height(200.dp) // Sesuaikan tinggi box sesuai kebutuhan
+                .clip(RoundedCornerShape(16.dp)) // Menambahkan border radius
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp)) // Menambahkan shadow
+        ) {
+            // Set background image
+            Image(
+                painter = painterResource(id = R.drawable.img),
+                contentDescription = "Background Image",
+                modifier = Modifier.matchParentSize(), // Membuat gambar memenuhi seluruh Box
+                contentScale = ContentScale.Crop // Mengatur gambar agar memenuhi box
+            )
+
+            // Button di tengah kanan sedikit
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd) // Posisikan button di tengah kanan
+                    .padding(end = 62.dp) // Menurunkan padding agar tidak terlalu kekanan
+            ) {
+                Button(
+                    onClick = { onProperti() },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFFFC441) // Mengganti warna button menjadi #ffc441
                     ),
