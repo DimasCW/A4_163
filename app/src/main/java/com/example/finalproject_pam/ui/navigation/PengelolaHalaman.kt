@@ -29,6 +29,15 @@ import com.example.finalproject_pam.ui.view.manajer.ManajerUpdateView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikDetailView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikHomeView
 import com.example.finalproject_pam.ui.view.pemilik.PemilikUpdateView
+import com.example.finalproject_pam.ui.view.properti.DestinasiDetailProperti
+import com.example.finalproject_pam.ui.view.properti.DestinasiUpdateProperti
+import com.example.finalproject_pam.ui.view.properti.PropertiHomeView
+import com.example.finalproject_pam.ui.view.properti.PropertiUpdateView
+import com.example.finalproject_pam.ui.view.properti.DestinasiEntryProperti
+import com.example.finalproject_pam.ui.view.properti.EntryPrptScreen
+import com.example.finalproject_pam.ui.view.properti.PropertiDetailView
+
+
 
 
 object DestinasiHomePemilik : DestinasiNavigasi{
@@ -45,12 +54,17 @@ object DestinasiHomeManajer : DestinasiNavigasi{
     override val titleRes = "Manajer"
 }
 
+object DestinasiHomeProperti : DestinasiNavigasi{
+    override val route = "home_properti"
+    override val titleRes = "Properti"
+}
+
 
 @Composable
 fun PengelolaHalaman(navController: NavHostController = rememberNavController()){
     NavHost(
         navController=navController,
-        startDestination = DestinasiBeranda .route,
+        startDestination = DestinasiHomeProperti .route,
         modifier = Modifier,
     ){
         composable(DestinasiBeranda.route) {
@@ -63,6 +77,9 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 },
                 onManajer = {
                     navController.navigate(DestinasiHomeManajer.route)
+                },
+                onProperti = {
+                    navController.navigate(DestinasiHomeProperti.route)
                 }
             )
         }
@@ -208,5 +225,58 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
                 )
             }
         }
+
+        // Properti Navigasi
+
+        composable(DestinasiHomeProperti.route){
+            PropertiHomeView(
+                navigateBack = { navController.popBackStack() },
+                navigateToItemEntry = { navController.navigate(DestinasiEntryProperti.route) },
+                navigateToPemilikHome = { navController.navigate(DestinasiHomePemilik.route) }, // Navigasi ke PemilikHomeView
+                navigateToManajerHome = { navController.navigate(DestinasiHomeManajer.route) }, // Navigasi ke ManajerHomeView
+                onDetailClick = { id_properti ->
+                    navController.navigate("${DestinasiDetailProperti.route}/$id_properti")
+                }
+            )
+        }
+        composable(DestinasiEntryProperti.route){
+            EntryPrptScreen(navigateBack = {
+                navController.navigate(DestinasiHomeProperti.route){
+                    popUpTo(DestinasiHomeProperti.route){
+                        inclusive = true
+                    }
+                }
+            })
+        }
+        composable(DestinasiDetailProperti.routesWithArg, arguments = listOf(navArgument(DestinasiDetailProperti.ID_PROPERTI) {
+            type = NavType.StringType })
+        ){
+            val id_properti = it.arguments?.getString(DestinasiDetailProperti.ID_PROPERTI)
+            id_properti?.let { id_properti ->
+                PropertiDetailView(
+                    navigateBack = { navController.popBackStack() },
+                    navigateToItemUpdate = {
+                        navController.navigate("${DestinasiUpdateProperti.route}/$id_properti")
+                    },
+                    navigateToJenisHome = {
+                        navController.navigate(DestinasiHomeJenis.route) // Navigasi ke JenisHomeView
+                    }
+                )
+            }
+        }
+        composable(DestinasiUpdateProperti.routesWithArg, arguments = listOf(navArgument(
+            DestinasiDetailProperti.ID_PROPERTI){
+            type = NavType.StringType })
+        ){
+            val id_properti = it.arguments?.getString(DestinasiUpdateProperti.ID_PROPERTI)
+            id_properti?.let { id_properti ->
+                PropertiUpdateView(
+                    onBack = { navController.popBackStack() },
+                    onNavigate = { navController.popBackStack() }
+                )
+            }
+        }
     }
 }
+
+
