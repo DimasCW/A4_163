@@ -20,9 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -61,8 +64,8 @@ object DestinasiHomeProperti : DestinasiNavigasi {
 fun PropertiHomeView(
     navigateBack: () -> Unit,
     navigateToItemEntry: () -> Unit,
-    navigateToPemilikHome: () -> Unit, // Tambahkan parameter untuk navigasi ke PemilikHomeView
-    navigateToManajerHome: () -> Unit, // Tambahkan parameter untuk navigasi ke ManajerHomeView
+    navigateToPemilikHome: () -> Unit,
+    navigateToManajerHome: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: PropertiHomeVM = viewModel(factory = PenyediaViewModel.Factory)
@@ -85,9 +88,10 @@ fun PropertiHomeView(
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(18.dp),
+                containerColor = Color(0xFF6200EE) // Warna aksen ungu
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Properti")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Properti", tint = Color.White)
             }
         }
     ) { innerPadding ->
@@ -95,25 +99,34 @@ fun PropertiHomeView(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .background(Color(0xFFF5F5F5)) // Warna latar belakang abu-abu muda
         ) {
-            // Tombol untuk navigasi ke PemilikHomeView
-            Button(
-                onClick = navigateToPemilikHome,
+            // Tombol untuk navigasi ke PemilikHomeView dan ManajerHomeView
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Lihat Pemilik")
-            }
+                Button(
+                    onClick = navigateToPemilikHome,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03DAC6)) // Warna aksen cyan
+                ) {
+                    Text(text = "Lihat Pemilik", color = Color.White)
+                }
 
-            // Tombol untuk navigasi ke ManajerHomeView
-            Button(
-                onClick = navigateToManajerHome,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(text = "Lihat Manajer")
+                Button(
+                    onClick = navigateToManajerHome,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF018786)) // Warna aksen teal
+                ) {
+                    Text(text = "Lihat Manajer", color = Color.White)
+                }
             }
 
             // Tampilan daftar properti
@@ -144,7 +157,7 @@ fun PropertiHomeStatus(
         is PropertiHomeUiState.Success -> {
             if (propertihomeUiState.properti.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data Properti")
+                    Text(text = "Tidak ada data Properti", style = MaterialTheme.typography.titleMedium)
                 }
             } else {
                 PrptLayout(
@@ -161,11 +174,12 @@ fun PropertiHomeStatus(
 
 @Composable
 fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.img),
-        contentDescription = stringResource(R.string.loading)
-    )
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = Color(0xFF6200EE)) // Warna aksen ungu
+    }
 }
 
 @Composable
@@ -175,12 +189,12 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img), contentDescription = ""
-        )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
+        Text(text = stringResource(R.string.loading_failed), style = MaterialTheme.typography.titleMedium)
+        Button(
+            onClick = retryAction,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)) // Warna aksen ungu
+        ) {
+            Text(stringResource(R.string.retry), color = Color.White)
         }
     }
 }
@@ -221,27 +235,31 @@ fun PrptCard(
             .padding(8.dp)
             .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE0F7FA)) // Warna latar belakang biru muda
                 .padding(16.dp)
         ) {
             // Bagian kiri: Logo atau gambar
+            val backgroundColor = when (properti.status_properti) {
+                "Tersedia" -> Color(0xFF4CAF50) // Hijau
+                "Dijual" -> Color(0xFFF44336) // Merah
+                "Tersewa" -> Color(0xFFFFEB3B) // Kuning
+                else -> Color(0xFF6200EE) // Default ungu
+            }
             Box(
                 modifier = Modifier
                     .size(80.dp)
-                    .background(Color(0xFF0097A7), shape = RoundedCornerShape(8.dp)),
+                    .background(backgroundColor, shape = RoundedCornerShape(8.dp)), // Warna sesuai status
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(R.drawable.man), // Ganti dengan logo Anda
-                    contentDescription = "Logo",
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Properti",
+                    tint = Color.White,
                     modifier = Modifier.size(40.dp)
                 )
             }
@@ -258,12 +276,17 @@ fun PrptCard(
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color(0xFF00796B) // Warna teks hijau tua
+                    color = Color(0xFF000000) // Warna teks hitam
                 )
                 Text(
-                    text = "Kontak: ${properti.harga}",
+                    text = "Status : ${properti.status_properti}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF004D40)
+                    color = Color(0xFF757575) // Warna teks abu-abu
+                )
+                Text(
+                    text = "Rp ${properti.harga}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF757575) // Warna teks abu-abu
                 )
             }
 
@@ -272,7 +295,7 @@ fun PrptCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red
+                    tint = Color(0xFFD32F2F) // Warna merah
                 )
             }
         }

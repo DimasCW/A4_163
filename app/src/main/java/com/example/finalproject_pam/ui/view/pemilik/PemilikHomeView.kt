@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,14 +59,14 @@ fun PemilikHomeView(
                 navigateUp = navigateBack
             )
         },
-
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(18.dp),
+                containerColor = Color(0xFF6200EE) // Warna aksen
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pemilik")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pemilik", tint = Color.White)
             }
         }
     ) { innerPadding ->
@@ -95,7 +96,7 @@ fun PemilikHomeStatus(
         is PemilikHomeUiState.Success -> {
             if (pemilikhomeUiState.pemilik.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data pemilik")
+                    Text(text = "Tidak ada data pemilik", style = MaterialTheme.typography.titleLarge)
                 }
             } else {
                 PmlkLayout(
@@ -112,11 +113,9 @@ fun PemilikHomeStatus(
 
 @Composable
 fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.img),
-        contentDescription = stringResource(R.string.loading)
-    )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(color = Color(0xFF6200EE))
+    }
 }
 
 @Composable
@@ -126,12 +125,9 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img), contentDescription = ""
-        )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
+        Text(text = stringResource(R.string.loading_failed), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(16.dp))
+        Button(onClick = retryAction, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE))) {
+            Text(stringResource(R.string.retry), color = Color.White)
         }
     }
 }
@@ -170,30 +166,31 @@ fun PmlkCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp),
+            .shadow(4.dp, shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE0F7FA)) // Warna latar belakang biru muda
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Bagian kiri: Logo atau gambar
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .background(Color(0xFF0097A7), shape = RoundedCornerShape(8.dp)),
+                    .size(60.dp)
+                    .background(Color(0xFF6200EE), shape = RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(R.drawable.man), // Ganti dengan logo Anda
+                Icon(
+                    imageVector = Icons.Default.Person,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(30.dp),
+                    tint = Color.White
                 )
             }
 
@@ -202,19 +199,19 @@ fun PmlkCard(
             // Bagian kanan: Informasi pemilik
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     text = pemilik.nama_pemilik,
-                    style = MaterialTheme.typography.titleMedium.copy(
+                    style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color(0xFF00796B) // Warna teks hijau tua
+                    color = Color(0xFF000000)
                 )
                 Text(
                     text = "Kontak: ${pemilik.kontak_pemilik}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF004D40)
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFF666666)
                 )
             }
 
@@ -223,7 +220,7 @@ fun PmlkCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red
+                    tint = Color(0xFFD32F2F)
                 )
             }
         }

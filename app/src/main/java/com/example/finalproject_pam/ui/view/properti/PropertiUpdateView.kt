@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject_pam.application.Applications
 import com.example.finalproject_pam.ui.PenyediaViewModel
@@ -86,7 +87,7 @@ fun PropertiUpdateView(
         }
     ) { padding ->
         EntryBody(
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.padding(15.dp),
             propertiinsertUiState = viewModel.UpdateUiState,
             onPropertiValueChange = viewModel::updateInsertPrptState,
             onSaveClick = {

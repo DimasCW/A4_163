@@ -20,9 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -81,14 +84,18 @@ fun ManajerHomeView(
                 navigateUp = navigateBack
             )
         },
-
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(16.dp),
+                containerColor = Color(0xFF6200EE) // Warna aksen
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Manajer")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Manajer",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     ) { innerPadding ->
@@ -118,7 +125,11 @@ fun ManajerHomeStatus(
         is ManajerHomeUiState.Success -> {
             if (manajerhomeUiState.manajer.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data pemilik")
+                    Text(
+                        text = "Tidak ada data manajer",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             } else {
                 MnjrLayout(
@@ -135,11 +146,9 @@ fun ManajerHomeStatus(
 
 @Composable
 fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.img),
-        contentDescription = stringResource(R.string.loading)
-    )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable
@@ -149,12 +158,13 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img), contentDescription = ""
+        Text(
+            text = stringResource(R.string.loading_failed),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(16.dp)
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
+        Button(onClick = retryAction, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
+            Text(text = stringResource(R.string.retry), color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
@@ -193,51 +203,52 @@ fun MnjrCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp),
+            .shadow(4.dp, shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE0F7FA)) // Warna latar belakang biru muda
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // Bagian kiri: Logo atau gambar
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .background(Color(0xFF0097A7), shape = RoundedCornerShape(8.dp)),
+                    .size(60.dp)
+                    .background(Color(0xFF6200EE), shape = RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(R.drawable.man), // Ganti dengan logo Anda
+                Icon(
+                    imageVector = Icons.Default.Person,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(30.dp),
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Bagian kanan: Informasi pemilik
+            // Bagian kanan: Informasi manajer
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     text = manajer.nama_manajer,
-                    style = MaterialTheme.typography.titleMedium.copy(
+                    style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color(0xFF00796B) // Warna teks hijau tua
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "Kontak: ${manajer.kontak_manajer}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF004D40)
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -246,7 +257,7 @@ fun MnjrCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,11 +71,13 @@ fun PemilikDetailView(
             FloatingActionButton(
                 onClick = navigateToItemUpdate,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.primary // Warna aksen
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Kontak"
+                    contentDescription = "Edit Kontak",
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -93,7 +96,6 @@ fun PemilikDetailView(
     }
 }
 
-
 @Composable
 fun PemilikDetailStatus(
     retryAction: () -> Unit,
@@ -107,7 +109,13 @@ fun PemilikDetailStatus(
             if (pemilikdetailUiState.pemilik.id_pemilik.isEmpty()) {
                 Box(
                     modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                ) { Text("Data tidak ditemukan") }
+                ) {
+                    Text(
+                        text = "Data tidak ditemukan",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             } else {
                 ItemDetailPmlk(
                     pemilik = pemilikdetailUiState.pemilik,
@@ -120,7 +128,6 @@ fun PemilikDetailStatus(
     }
 }
 
-
 @Composable
 fun ItemDetailPmlk(
     modifier: Modifier = Modifier,
@@ -131,17 +138,20 @@ fun ItemDetailPmlk(
     Card(
         modifier = modifier.padding(16.dp),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             ComponentDetailPmlk(judul = "ID PEMILIK", isinya = pemilik.id_pemilik)
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            Divider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline)
             ComponentDetailPmlk(judul = "Nama Pemilik", isinya = pemilik.nama_pemilik)
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            Divider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline)
             ComponentDetailPmlk(judul = "Kontak Pemilik", isinya = pemilik.kontak_pemilik)
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            Divider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outline)
 
             Spacer(modifier = Modifier.padding(8.dp))
 
@@ -149,9 +159,12 @@ fun ItemDetailPmlk(
                 onClick = {
                     deleteConfirmationRequired = true
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                )
             ) {
-                Text(text = "Delete")
+                Text(text = "Delete", color = MaterialTheme.colorScheme.onError)
             }
 
             if (deleteConfirmationRequired) {
@@ -168,7 +181,6 @@ fun ItemDetailPmlk(
     }
 }
 
-
 @Composable
 fun ComponentDetailPmlk(
     modifier: Modifier = Modifier,
@@ -181,34 +193,47 @@ fun ComponentDetailPmlk(
     ) {
         Text(
             text = judul,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
         Text(
             text = isinya,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
+
 @Composable
 private fun DeleteConfirmationDialog(
-    onDeleteConfirm: () -> Unit, onDeleteCancel: () -> Unit, modifier: Modifier = Modifier
+    onDeleteConfirm: () -> Unit,
+    onDeleteCancel: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    AlertDialog(onDismissRequest = {},
-        title = { Text("Delete Data") },
-        text = { Text("Apakah anda yakin ingin menghapus data?") },
+    AlertDialog(
+        onDismissRequest = { onDeleteCancel() },
+        title = {
+            Text(
+                text = "Delete Data",
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Text(
+                text = "Apakah anda yakin ingin menghapus data?",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
         modifier = modifier,
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                Text(text = "Cancel")
+                Text(text = "Cancel", color = MaterialTheme.colorScheme.onSurface)
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Yes")
+                Text(text = "Yes", color = MaterialTheme.colorScheme.error)
             }
-        })
+        }
+    )
 }

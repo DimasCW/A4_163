@@ -1,15 +1,18 @@
 package com.example.finalproject_pam.ui.view.properti
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +36,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject_pam.ui.PenyediaViewModel
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import com.example.finalproject_pam.model.Properti
 import com.example.finalproject_pam.ui.costumwidget.CostumeTopAppBar
 import com.example.finalproject_pam.ui.navigation.DestinasiNavigasi
@@ -52,11 +57,12 @@ object DestinasiDetailProperti: DestinasiNavigasi {
 fun PropertiDetailView(
     navigateBack: () -> Unit,
     navigateToItemUpdate: () -> Unit,
-    navigateToJenisHome: () -> Unit, // Tambahkan parameter untuk navigasi ke JenisHomeView
+    navigateToJenisHome: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PropertiDetailVM = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     Scaffold(
+        modifier = modifier.background(Color(0xFFF5F5F5)), // Warna latar belakang abu-abu muda
         topBar = {
             CostumeTopAppBar(
                 title = DestinasiDetailProperti.titleRes,
@@ -71,11 +77,13 @@ fun PropertiDetailView(
             FloatingActionButton(
                 onClick = navigateToItemUpdate,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(18.dp),
+                containerColor = Color(0xFF6200EE) // Warna aksen ungu
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Kontak"
+                    contentDescription = "Edit Kontak",
+                    tint = Color.White
                 )
             }
         }
@@ -90,11 +98,10 @@ fun PropertiDetailView(
                 })
                 navigateBack()
             },
-            onJenisClick = navigateToJenisHome // Teruskan fungsi navigasi ke JenisHomeView
+            onJenisClick = navigateToJenisHome
         )
     }
 }
-
 
 @Composable
 fun PropertiDetailStatus(
@@ -102,53 +109,52 @@ fun PropertiDetailStatus(
     modifier: Modifier = Modifier,
     propertidetailUiState: PropertiDetailUiState,
     onDeleteClick: () -> Unit,
-    onJenisClick: () -> Unit // Tambahkan parameter untuk navigasi ke JenisHomeView
+    onJenisClick: () -> Unit
 ) {
     when (propertidetailUiState) {
-        is PropertiDetailUiState.Loading -> com.example.finalproject_pam.ui.view.properti.OnLoading(
-            modifier = modifier.fillMaxSize()
-        )
+        is PropertiDetailUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
         is PropertiDetailUiState.Success -> {
             if (propertidetailUiState.properti.id_properti.isEmpty()) {
                 Box(
                     modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                ) { Text("Data tidak ditemukan") }
+                ) {
+                    Text("Data tidak ditemukan", style = MaterialTheme.typography.titleMedium)
+                }
             } else {
                 ItemDetailPrpt(
                     properti = propertidetailUiState.properti,
                     modifier = modifier.fillMaxWidth(),
                     onDeleteClick = onDeleteClick,
-                    onJenisClick = onJenisClick // Teruskan fungsi navigasi ke ItemDetailPrpt
+                    onJenisClick = onJenisClick
                 )
             }
         }
-        is PropertiDetailUiState.Error -> com.example.finalproject_pam.ui.view.properti.OnError(
-            retryAction,
-            modifier = modifier.fillMaxSize()
-        )
+        is PropertiDetailUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
-
 
 @Composable
 fun ItemDetailPrpt(
     modifier: Modifier = Modifier,
     properti: Properti,
     onDeleteClick: () -> Unit,
-    onJenisClick: () -> Unit // Tambahkan parameter untuk navigasi ke JenisHomeView
+    onJenisClick: () -> Unit
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Card(
-        modifier = modifier.padding(16.dp),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        modifier = modifier
+            .padding(16.dp)
+            .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            ComponentDetailPrpt(judul = "ID properti", isinya = properti.id_properti)
+            ComponentDetailPrpt(judul = "ID Properti", isinya = properti.id_properti)
             Divider(modifier = Modifier.padding(vertical = 8.dp))
-            ComponentDetailPrpt(judul = "Nama properti", isinya = properti.nama_properti)
+            ComponentDetailPrpt(judul = "Nama Properti", isinya = properti.nama_properti)
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             ComponentDetailPrpt(judul = "Deskripsi", isinya = properti.deskripsi_properti)
             Divider(modifier = Modifier.padding(vertical = 8.dp))
@@ -167,20 +173,22 @@ fun ItemDetailPrpt(
 
             // Tombol Delete
             Button(
-                onClick = {
-                    deleteConfirmationRequired = true
-                },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { deleteConfirmationRequired = true },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)) // Warna merah
             ) {
-                Text(text = "Delete")
+                Text(text = "Delete", color = Color.White)
             }
+
+            Spacer(modifier = Modifier.padding(8.dp))
 
             // Tombol Lihat Jenis
             Button(
-                onClick = onJenisClick, // Panggil fungsi navigasi ke JenisHomeView
-                modifier = Modifier.fillMaxWidth()
+                onClick = onJenisClick,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03DAC6)) // Warna aksen cyan
             ) {
-                Text(text = "Lihat Jenis")
+                Text(text = "Lihat Jenis", color = Color.White)
             }
 
             if (deleteConfirmationRequired) {
@@ -221,22 +229,25 @@ fun ComponentDetailPrpt(
         )
     }
 }
+
 @Composable
 private fun DeleteConfirmationDialog(
     onDeleteConfirm: () -> Unit, onDeleteCancel: () -> Unit, modifier: Modifier = Modifier
 ) {
-    AlertDialog(onDismissRequest = {},
+    AlertDialog(
+        onDismissRequest = {},
         title = { Text("Delete Data") },
         text = { Text("Apakah anda yakin ingin menghapus data?") },
         modifier = modifier,
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                Text(text = "Cancel")
+                Text(text = "Cancel", color = Color(0xFF6200EE)) // Warna aksen ungu
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Yes")
+                Text(text = "Yes", color = Color(0xFFD32F2F)) // Warna merah
             }
-        })
+        }
+    )
 }

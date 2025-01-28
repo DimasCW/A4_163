@@ -20,9 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -79,14 +83,14 @@ fun JenisHomeView(
                 navigateUp = navigateBack
             )
         },
-
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(18.dp)
+                modifier = Modifier.padding(18.dp),
+                containerColor = Color(0xFF6200EE) // Menggunakan containerColor, bukan backgroundColor
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Jenis")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Jenis", tint = Color.White)
             }
         }
     ) { innerPadding ->
@@ -116,7 +120,11 @@ fun JenisHomeStatus(
         is JenisHomeUiState.Success -> {
             if (jenishomeUiState.jenis.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data jenis")
+                    Text(
+                        text = "Tidak ada data jenis",
+                        style = MaterialTheme.typography.titleMedium, // Menggunakan titleMedium
+                        color = Color.Gray
+                    )
                 }
             } else {
                 JnsLayout(
@@ -133,11 +141,9 @@ fun JenisHomeStatus(
 
 @Composable
 fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.img),
-        contentDescription = stringResource(R.string.loading)
-    )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(color = Color(0xFF6200EE)) // Warna ungu modern
+    }
 }
 
 @Composable
@@ -147,12 +153,23 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img), contentDescription = ""
+        Icon(
+            imageVector = Icons.Default.Warning,
+            contentDescription = "Error",
+            tint = Color(0xFFD32F2F), // Warna merah modern
+            modifier = Modifier.size(64.dp)
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
+        Text(
+            text = stringResource(R.string.loading_failed),
+            style = MaterialTheme.typography.titleMedium, // Menggunakan titleMedium
+            color = Color.Gray,
+            modifier = Modifier.padding(16.dp)
+        )
+        Button(
+            onClick = retryAction,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE)) // Menggunakan containerColor
+        ) {
+            Text(stringResource(R.string.retry), color = Color.White)
         }
     }
 }
@@ -201,20 +218,21 @@ fun JnsCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE0F7FA)) // Warna latar belakang biru muda
+                .background(Color(0xFFF5F5F5)) // Warna latar belakang abu-abu muda
                 .padding(16.dp)
         ) {
             // Bagian kiri: Logo atau gambar
             Box(
                 modifier = Modifier
                     .size(80.dp)
-                    .background(Color(0xFF0097A7), shape = RoundedCornerShape(8.dp)),
+                    .background(Color(0xFF6200EE), shape = RoundedCornerShape(8.dp)), // Warna ungu modern
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(R.drawable.man), // Ganti dengan logo Anda
+                Icon(
+                    imageVector = Icons.Default.Person,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = Color.White
                 )
             }
 
@@ -230,19 +248,17 @@ fun JnsCard(
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color(0xFF00796B) // Warna teks hijau tua
+                    color = Color(0xFF6200EE) // Warna ungu modern
                 )
                 Text(
                     text = jenis.nama_jenis,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = Color(0xFF00796B) // Warna teks hijau tua
+                    style = MaterialTheme.typography.bodyMedium, // Menggunakan bodyMedium
+                    color = Color(0xFF424242) // Warna teks abu-abu gelap
                 )
                 Text(
                     text = "Deskripsi: ${jenis.deskripsi_jenis}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF004D40)
+                    style = MaterialTheme.typography.bodySmall, // Menggunakan bodySmall
+                    color = Color(0xFF757575) // Warna teks abu-abu
                 )
             }
 
@@ -251,7 +267,7 @@ fun JnsCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red
+                    tint = Color(0xFFD32F2F) // Warna merah modern
                 )
             }
         }
