@@ -5,10 +5,13 @@ import com.example.finalproject_pam.repository.ManajerRepository
 import com.example.finalproject_pam.repository.NetworkJenisRepository
 import com.example.finalproject_pam.repository.NetworkManajerRepository
 import com.example.finalproject_pam.repository.NetworkPemilikRepository
+import com.example.finalproject_pam.repository.NetworkPropertiRepository
 import com.example.finalproject_pam.repository.PemilikRepository
+import com.example.finalproject_pam.repository.PropertiRepository
 import com.example.finalproject_pam.service.JenisService
 import com.example.finalproject_pam.service.ManajerService
 import com.example.finalproject_pam.service.PemilikService
+import com.example.finalproject_pam.service.PropertiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -19,6 +22,7 @@ interface AppContainer{
     val pemilikRepository: PemilikRepository
     val jenisRepository: JenisRepository
     val manajerRepository: ManajerRepository
+    val propertiRepository: PropertiRepository
 }
 
 class Container : AppContainer{
@@ -46,5 +50,12 @@ class Container : AppContainer{
     }
     override val manajerRepository: ManajerRepository by lazy {
         NetworkManajerRepository(manajerService)
+    }
+
+    private val propertiService: PropertiService by lazy {
+        retrofit.create(PropertiService::class.java)
+    }
+    override val propertiRepository: PropertiRepository by lazy {
+        NetworkPropertiRepository(propertiService)
     }
 }
