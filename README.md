@@ -2,7 +2,7 @@
 20220140163**_**
 -----------------------------------------------------------------------------------------------------------
 **PROPERTI**
-Halaman Home Properti
+Halaman Home Properti</n>
 ![image](https://github.com/user-attachments/assets/37e40229-35f1-4993-b742-cabfe45ca0a6)
 
 Halaman Insert Properti
